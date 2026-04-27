@@ -1,6 +1,6 @@
 // PenguinRookeryDB.java
-// D. Singletary
-// 3/28/23
+// Sakura Gordon
+// 4/26/26
 // Class for Penguin Rookery DB operations
 
 package edu.fscj.cop2800c.penguin;
@@ -33,13 +33,19 @@ public class PalmerPenguinsDB
                 stmt.executeUpdate("USE " + DB_NAME);
     
                 // Create table
-                // *** add your code here
-                
+                String createTable = "CREATE TABLE Penguin " +
+                    "(SAMPLENUM smallint PRIMARY KEY NOT NULL," +
+                    "CULMENLEN float NOT NULL," +
+                    "CULMENDEPTH float NOT NULL," +
+                    "BODYMASS smallint NOT NULL," +
+                    "SEX char(1) NOT NULL," +
+                    "SPECIES varchar(20) NOT NULL," +
+                    "FLIPPERLEN float NOT NULL)";
                 
                 stmt.executeUpdate(createTable);
                 System.out.println("Table created");
     
-                // Insert records using batch with try-with-resources
+                // Insert records
                 String insertQuery = "INSERT INTO Penguin (SAMPLENUM, CULMENLEN, CULMENDEPTH, " +
                                      "BODYMASS, SEX, SPECIES, FLIPPERLEN) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 try (PreparedStatement pstmt = con.prepareStatement(insertQuery)) {
@@ -61,10 +67,20 @@ public class PalmerPenguinsDB
                     System.out.println("Data inserted");
                 }
     
-                // Query and print results using try-with-resources
+                // Query and print results
                 try (ResultSet rs = stmt.executeQuery("SELECT * FROM Penguin")) {
-                    // *** add your code here
-
+                    System.out.println("Reading from DB");
+                    while (rs.next()) {
+                        System.out.println(
+                            rs.getInt("SAMPLENUM") + "," +
+                            rs.getDouble("CULMENLEN") + "," +
+                            rs.getDouble("CULMENDEPTH") + "," +
+                            rs.getInt("BODYMASS") + "," +
+                            rs.getString("SEX") + "," +
+                            rs.getString("SPECIES") + "," +
+                            rs.getDouble("FLIPPERLEN")
+                        );
+                    }
                 }
     
                 // Drop the table
@@ -83,5 +99,4 @@ public class PalmerPenguinsDB
             e.printStackTrace();
         }
     }
-    
 }
